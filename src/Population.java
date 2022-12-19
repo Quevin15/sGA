@@ -100,6 +100,38 @@ public class Population implements Cloneable, Iterable<Individual> {
 	}
 
 
+	public ArrayList<Individual> improvedElitistSelection(int n){
+		PriorityQueue<Individual> heap = new PriorityQueue<Individual>(n, new Comparator<Individual>() {
+			@Override
+			public int compare(Individual x, Individual y) {
+				if(x.getFitness() > y.getFitness()) return -1;
+				else if(x.getFitness() < y.getFitness()) return 1;
+				return 0;
+			}
+		});
+
+		heap.addAll(population);
+
+		ArrayList<Individual> elitists = new ArrayList<>();
+		for(int i = 0; i < n;i++)
+			elitists.add(heap.poll());
+
+		int elitistSample = size()/2;
+		ArrayList<Individual> result = new ArrayList<>();
+		for(int i = 0; i < elitistSample/n;i++){
+			for(var individual : elitists){
+				result.add(individual.clone());
+			}
+		}
+
+		int l = result.size();
+		for(int i= 0; i < size()-l;i++){
+			result.add(population.get(generator.nextInt(size())).clone());
+		}
+
+		return result;
+	}
+
 	private void permutation(ArrayList<Individual> a){
 		int n = a.size()-1;
 		for(int i = 0; i < n;i++) {

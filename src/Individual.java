@@ -17,7 +17,6 @@ public class Individual implements Cloneable{
 
 	public Individual[] onePointCrossover(Individual partner,Random generator){
 		int l = representation.length;
-		System.out.println(l);
 		int[] parent1 = representation, parent2 = partner.representation;
 		int c = 1 +  generator.nextInt(l-2); //points were the "dna" is split
 
@@ -67,6 +66,13 @@ public class Individual implements Cloneable{
 			if(generator.nextDouble() < p)
 				representation[i] = generator.nextInt(range);
 		fitnessValue = fitnessFunction.getFitness(this);
+	}
+
+	public void goodMutation(double p,Random generator){
+		if(generator.nextDouble() < p) {
+			representation[generator.nextInt(representation.length)] = generator.nextInt(range);
+			fitnessValue = fitnessFunction.getFitness(this);
+		}
 	}
 
 	@Override

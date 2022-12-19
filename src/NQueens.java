@@ -15,6 +15,14 @@ public class NQueens implements IFitness{
 
 		return result;
 	}
+	private int getDifConflicts(int variable){
+		int result = 0;
+		if(columns[board[variable]] > 1) result+= columns[board[variable]] -1;
+		if(diagonal[variable+board[variable]] > 1)result += diagonal[variable+board[variable]] -1;
+		if(invDiagonal[variable+ size -1-board[variable]] > 1) result += invDiagonal[variable + size -1 -board[variable]]-1;
+
+		return result;
+	}
 	@Override
 	public double getFitness(Individual x) {
 		board = x.toArray();
@@ -35,7 +43,7 @@ public class NQueens implements IFitness{
 
 		double fitness = 0.0;
 		for(int i =0; i < size;++i){
-			fitness -= getConflicts(i);
+			fitness -= getDifConflicts(i);
 		}
 
 /*

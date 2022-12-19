@@ -24,7 +24,7 @@ public class SimpleGeneticAlgorithm {
 			 //crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){
 				if(generator.nextDouble() >= pCrossover) continue;
-				var children = population2.get(i-1).Crossover(population2.get(i), generator);
+				var children = population2.get(i-1).onePointCrossover(population2.get(i), generator);
 				population2.set(i - 1, children[0]);
 				population2.set(i, children[1]);
 			}
@@ -40,7 +40,9 @@ public class SimpleGeneticAlgorithm {
 			}
 
 	//		 System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
-			++k;
+
+			 System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
+			 ++k;
 
 			population = new Population(population2,fitness,generator);
 		 }while(mostFit.getFitness() < isFit);
@@ -48,7 +50,7 @@ public class SimpleGeneticAlgorithm {
 	}
 
 	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation, IFitness fitness,double isFit){
-		var population = new Population(n,l, fitness,range,generator);
+		var population = Population.differentPopulation(n,l, fitness,range,generator);
 
 		int k = 0;
 		Individual mostFit;
@@ -58,14 +60,14 @@ public class SimpleGeneticAlgorithm {
 			//crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){
 				if(generator.nextDouble() >= pCrossover) continue;
-				var children = population2.get(i-1).onePointCrossover(population2.get(i), generator);
+				var children = population2.get(i-1).Crossover(population2.get(i), generator);
 				population2.set(i - 1, children[0]);
 				population2.set(i, children[1]);
 			}
 
 			for(int i = 0; i < n;i++){
 				if(generator.nextDouble() >= pCrossover) continue;
-				population2.get(i).swapMutation(generator);
+				population2.get(i).swapMutation(pMutation,generator);
 			}
 
 			mostFit = population2.get(0);
@@ -77,6 +79,7 @@ public class SimpleGeneticAlgorithm {
 			//		 System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
 			++k;
 
+			System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
 			population = new Population(population2,fitness,generator);
 		}while(mostFit.getFitness() < isFit);
 		return mostFit.toString();

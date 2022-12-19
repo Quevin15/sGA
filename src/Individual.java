@@ -39,7 +39,7 @@ public class Individual implements Cloneable{
 		}
 		children[0] = new Individual(aux);
 
-		set = new HashSet<>(l/2);
+		set = new HashSet<>(l);
 		for(int i = c1; i<c; i++) set.add(parent2[i]);
 		//stores the children array
 		aux = new int[l];
@@ -58,6 +58,7 @@ public class Individual implements Cloneable{
 
 		return children;
 	}
+	
 	public Individual[] onePointCrossover(Individual partner,Random generator){
 		int l = representation.length;
 
@@ -130,5 +131,18 @@ public class Individual implements Cloneable{
 		} catch(CloneNotSupportedException e) {
 			throw new AssertionError();
 		}
+	}
+
+	public void swapMutation(double p,Random generator) {
+		if(generator.nextDouble() >= p) return;
+		exchangeOnArray(representation,generator.nextInt(range),generator.nextInt(range-1));
+		this.fitnessValue = fitnessFunction.getFitness(this);
+	}
+
+	private static void exchangeOnArray(int[] a, int i, int j)
+	{
+		int t = a[i];
+		a[i] = a[j];
+		a[j] = t;
 	}
 }

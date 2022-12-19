@@ -41,7 +41,9 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
+	//range == l
 	public static Population differentPopulation(int n, int l, IFitness fitness,int range,Random generator){
+		if(l != range) throw new IllegalArgumentException("The length of the dna and the range of it's chromosomes must match");
 		Population result= new Population();
 		result.generator = generator;
 		Individual.range = range;
@@ -49,8 +51,9 @@ public class Population implements Cloneable, Iterable<Individual> {
 		for(int i = 0; i < n;i++){
 			var a = new int[l];
 			for(int j = 0;j< l;j++){
-				a[j] = generator.nextInt(range);
+				a[j] = j;
 			}
+			shuffle(a,generator);
 			var ind = new Individual(a);
 			result.total += ind.getFitness();
 			result.population.add(ind);
@@ -58,8 +61,22 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return result;
 	}
 
+	private static void shuffle(int[] a,Random generator){
+		for(int i = a.length -1 ; i > 0; i--) {
+			int j = generator.nextInt(i + 1);
+			exchangeOnArray(a, i, j);
+		}
+	}
+
+	private static void exchangeOnArray(int[] a, int i, int j)
+	{
+		int t = a[i];
+		a[i] = a[j];
+		a[j] = t;
+	}
+
 	public double getMax(){
-		double max = Double.MIN_NORMAL;
+		double max = -Double.MAX_VALUE;
 		for(var x: population)
 			max = Math.max(max, x.getFitness());
 		return max;

@@ -22,6 +22,7 @@ public class NQueens implements IFitness{
 		if(invDiagonal[variable+ size -1-board[variable]] > 1) result += invDiagonal[variable + size -1 -board[variable]]-1;
 
 		return result;
+
 	}
 	@Override
 	public double getFitness(Individual x) {

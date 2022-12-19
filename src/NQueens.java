@@ -17,12 +17,8 @@ public class NQueens implements IFitness{
 	}
 	@Override
 	public double getFitness(Individual x) {
-		size = x.toString().length();
-
-		var boardString = x.toString();
-		board = new int[size];
-		for(int i = 0; i < size;++i)
-			board[i] = boardString.charAt(i) - '0';
+		board = x.toArray();
+		size = board.length;
 
 		diagonal = new int[size *2-1];
 		for(int i = 0; i < size; i++)

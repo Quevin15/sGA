@@ -30,13 +30,11 @@ public class Population implements Cloneable, Iterable<Individual> {
 		Individual.range = range;
 		Individual.fitnessFunction = fitness;
 		for(int i = 0; i < n;i++){
-			var sb = new StringBuilder();
+			var a = new int[l];
 			for(int j = 0;j< l;j++){
-				sb.append(generator.nextInt(range));
+				a[j] = generator.nextInt(range);
 			}
-			var s = sb.toString();
-			System.out.println(s);
-			var ind = new Individual(s);
+			var ind = new Individual(a);
 			total += ind.getFitness();
 			population.add(ind);
 		}

@@ -24,7 +24,7 @@ public class SimpleGeneticAlgorithm {
 			 //crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){
 				if(generator.nextDouble() >= pCrossover) continue;
-				var children = population2.get(i-1).onePointCrossover(population2.get(i), generator);
+				var children = population2.get(i-1).Crossover(population2.get(i), generator);
 				population2.set(i - 1, children[0]);
 				population2.set(i, children[1]);
 			}

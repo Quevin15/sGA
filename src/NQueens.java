@@ -9,7 +9,6 @@ public class NQueens implements IFitness{
 	private int getConflicts(int variable){
 		if(diagonal[variable+board[variable]] > 1) return 1;
 		if(invDiagonal[variable+ size -1-board[variable]] > 1) return 1;
-
 		return 0;
 	}
 	private int getDifConflicts(int variable){
@@ -25,13 +24,12 @@ public class NQueens implements IFitness{
 		board = x.toArray();
 		size = board.length;
 
-		diagonal = new int[size *2-1];
-		for(int i = 0; i < size; i++)
-			++diagonal[i+board[i]];
-
 		invDiagonal = new int[size *2-1];
-		for(int i = 0; i < size; i++)
-			++invDiagonal[i+ size -1-board[i]];
+		diagonal = new int[size *2-1];
+		for(int i = 0; i < size; i++) {
+			++diagonal[i + board[i]];
+			++invDiagonal[i + size - 1 - board[i]];
+		}
 
 		double fitness = 0.0;
 		for(int i =0; i < size;++i){

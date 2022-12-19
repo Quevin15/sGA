@@ -19,7 +19,7 @@ public class SimpleGeneticAlgorithm {
 		 int k = 0;
 		 Individual mostFit;
 		 do{
-			var population2 = population.improvedElitistSelection(n/20);
+			var population2 = population.tournamentSelNoRep(15);
 
 			 //crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){
@@ -48,6 +48,7 @@ public class SimpleGeneticAlgorithm {
 		 }while(mostFit.getFitness() < isFit);
 		 return mostFit.toString();
 	}
+
 
 	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation , IFitness fitness,double isFit){
 		var population = Population.differentPopulation(n,l, fitness,range,generator);

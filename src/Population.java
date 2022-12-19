@@ -190,6 +190,25 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return result;
 	}
 
+	public ArrayList<Individual> elitismV3(){
+		int n = size()/20;
+		Individual[] sortedPopulation =  new Individual[size()];
+		for(int i = 0 ; i < size();i++)
+			sortedPopulation[i] = population.get(i);
+
+		Arrays.sort(sortedPopulation, new Comparator<Individual>() {
+			@Override
+			public int compare(Individual individual, Individual t1) {
+				return (int)Math.signum(t1.getFitness() - individual.getFitness());
+			}
+		});
+
+		var selectedPopulation = new ArrayList<Individual>();
+		selectedPopulation.addAll(Arrays.asList(sortedPopulation).subList(0, n));
+
+		return selectedPopulation;
+	}
+
 	private void permutation(ArrayList<Individual> a){
 		int n = a.size()-1;
 		for(int i = 0; i < n;i++) {

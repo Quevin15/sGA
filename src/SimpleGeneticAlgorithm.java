@@ -49,13 +49,13 @@ public class SimpleGeneticAlgorithm {
 		 return mostFit.toString();
 	}
 
-	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation, IFitness fitness,double isFit){
+	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation , IFitness fitness,double isFit){
 		var population = Population.differentPopulation(n,l, fitness,range,generator);
 
 		int k = 0;
 		Individual mostFit;
 		do{
-			var population2 = population.elitistSelection(n/10);
+			var population2 = population.tournamentSelNoRep(20);
 
 			//crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){
@@ -66,7 +66,6 @@ public class SimpleGeneticAlgorithm {
 			}
 
 			for(int i = 0; i < n;i++){
-				if(generator.nextDouble() >= pCrossover) continue;
 				population2.get(i).swapMutation(pMutation,generator);
 			}
 

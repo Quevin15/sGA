@@ -74,6 +74,30 @@ public class Population implements Cloneable, Iterable<Individual> {
 		a[i] = a[j];
 		a[j] = t;
 	}
+	public ArrayList<Individual> tournamentSelNoRep(int s){
+		int n = population.size()/s;
+		var winners = new ArrayList<Individual>(size());
+		for(int k = 0 ; k < s;k++) {
+			ArrayList<Individual> a = new ArrayList<>(population);
+			permutation(a);
+			var it = a.iterator();
+			for(int i = 0; i < n; i++) {
+				double mostFitValue = -Double.MAX_VALUE;
+				Individual mostFitInd = null;
+				int m = i * s + s;
+				for(int j = i * s; j < m; j++) {
+					var ind = it.next();
+					if(ind.getFitness() > mostFitValue) {
+						mostFitInd = ind;
+						mostFitValue = ind.getFitness();
+					}
+				}
+				winners.add(mostFitInd.clone());
+			}
+		}
+		return winners;
+	}
+
 
 	public double getMax(){
 		double max = -Double.MAX_VALUE;

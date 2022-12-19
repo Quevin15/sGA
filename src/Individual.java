@@ -134,9 +134,17 @@ public class Individual implements Cloneable{
 	}
 
 	public void swapMutation(double p,Random generator) {
-		if(generator.nextDouble() >= p) return;
-		exchangeOnArray(representation,generator.nextInt(range),generator.nextInt(range-1));
-		this.fitnessValue = fitnessFunction.getFitness(this);
+		double r = generator.nextDouble();
+		if(r < p/2) {
+			exchangeOnArray(representation, generator.nextInt(range), generator.nextInt(range - 1));
+			exchangeOnArray(representation, generator.nextInt(range), generator.nextInt(range - 1));
+			this.fitnessValue = fitnessFunction.getFitness(this);
+			return;
+		}
+		if(r < p) {
+			exchangeOnArray(representation, generator.nextInt(range), generator.nextInt(range - 1));
+			this.fitnessValue = fitnessFunction.getFitness(this);
+		}
 	}
 
 	private static void exchangeOnArray(int[] a, int i, int j)

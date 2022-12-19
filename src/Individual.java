@@ -95,4 +95,12 @@ public class Individual implements Cloneable{
 			throw new AssertionError();
 		}
 	}
+
+	public void swapMutation(Random generator) {
+		int x = generator.nextInt(range);
+		int y = generator.nextInt(range);
+		int temp = representation[x];
+		representation[x] = representation[y];
+		representation[y] = temp;
+	}
 }

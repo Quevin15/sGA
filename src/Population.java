@@ -15,6 +15,7 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	};
 
+	Population(){}
 	Population(ArrayList<Individual> population,IFitness fitness,Random r){
 		this.generator = r;
 		this.population = population;
@@ -40,6 +41,22 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
+	public static Population differentPopulation(int n, int l, IFitness fitness,int range,Random generator){
+		Population result= new Population();
+		result.generator = generator;
+		Individual.range = range;
+		Individual.fitnessFunction = fitness;
+		for(int i = 0; i < n;i++){
+			var a = new int[l];
+			for(int j = 0;j< l;j++){
+				a[j] = generator.nextInt(range);
+			}
+			var ind = new Individual(a);
+			result.total += ind.getFitness();
+			result.population.add(ind);
+		}
+		return result;
+	}
 
 	public double getMax(){
 		double max = Double.MIN_NORMAL;

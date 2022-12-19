@@ -47,8 +47,7 @@ public class SimpleGeneticAlgorithm {
 		 return mostFit.toString();
 	}
 
-/*
-	public String orderBasedGA(int n, int l,int range,double pCrossover, double pMutation, IFitness fitness,double isFit){
+	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation, IFitness fitness,double isFit){
 		var population = new Population(n,l, fitness,range,generator);
 
 		int k = 0;
@@ -65,7 +64,8 @@ public class SimpleGeneticAlgorithm {
 			}
 
 			for(int i = 0; i < n;i++){
-				population2.get(i).numberMutation(pMutation,generator);
+				if(generator.nextDouble() >= pCrossover) continue;
+				population2.get(i).swapMutation(generator);
 			}
 
 			mostFit = population2.get(0);
@@ -81,6 +81,5 @@ public class SimpleGeneticAlgorithm {
 		}while(mostFit.getFitness() < isFit);
 		return mostFit.toString();
 	}
-*/
 }
 //	result[k]= String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin());

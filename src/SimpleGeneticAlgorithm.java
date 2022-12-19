@@ -55,7 +55,7 @@ public class SimpleGeneticAlgorithm {
 		int k = 0;
 		Individual mostFit;
 		do{
-			var population2 = population.improvedElitistSelection(n/20);
+			var population2 = population.elitistSelection(n/10);
 
 			//crossover with probability pCrossover
 			for(int i = 1 ; i < n;i+=2){

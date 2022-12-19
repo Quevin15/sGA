@@ -34,7 +34,7 @@ public class Individual implements Cloneable{
 			if(set.contains(parent2[i])){
 				continue;
 			}
-			if(r == c1) r+=l/2 - 1;
+			if(r == c1) r+=l/2;
 			aux[r++] = parent2[i];
 		}
 		children[0] = new Individual(aux);

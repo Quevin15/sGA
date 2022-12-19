@@ -1,10 +1,28 @@
 import java.util.Arrays;
 
 public class NQueens implements IFitness{
+	/**
+	 * Keeps track of the right-left diagonals being attacked
+	 */
 	int[] diagonal;
+	/**
+	 * Keeps track of the right-left diagonals being attacked
+	 */
 	int[] invDiagonal;
+	/**
+	 * The representation of the board, row based representation, the index represents the row and the value represents the column
+	 */
 	int[] board;
+	/**
+	 * The size of the board, also the number of queens
+	 */
 	int size;
+
+	/**
+	 * Get the number of conflicts of a given queen
+	 * @param variable The row of a queen
+	 * @return the conflicts of the given queen
+	 */
 
 	private int getConflicts(int variable){
 		if(diagonal[variable+board[variable]] > 1) return 1;

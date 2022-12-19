@@ -1,10 +1,26 @@
 import java.util.*;
 
 public class Population implements Cloneable, Iterable<Individual> {
+	/**
+	 * The population
+	 */
 	private ArrayList<Individual> population = new ArrayList<>();
+	/**
+	 * The fitness function that will be used
+	 */
 	private IFitness fitness;
+	/**
+	 * The random generator that will be used
+	 */
 	private Random generator;
+	/**
+	 * The total fitness of the population
+	 */
 	private double total= 0.0;
+
+	/**
+	 * The comparator of individuals
+	 */
 
 	static Comparator<Individual> comparator = new Comparator<Individual>() {
 		@Override
@@ -15,7 +31,17 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	};
 
+	/**
+	 * Constucts  population
+	 */
 	Population(){}
+
+	/**
+	 * Constucts a population with a list of individuals, a fitness function, and a random generator
+	 * @param population the population
+	 * @param fitness the fitness function
+	 * @param r the random generator
+	 */
 	Population(ArrayList<Individual> population,IFitness fitness,Random r){
 		this.generator = r;
 		this.population = population;
@@ -25,6 +51,16 @@ public class Population implements Cloneable, Iterable<Individual> {
 			total += x.getFitness();
 		}
 	}
+
+	/**
+	 * Constructs a population with 'n' individuals of size 'l' with a fitness function, a chromossome range and a random
+	 * generator.
+	 * @param n the population size
+	 * @param l the individuals length
+	 * @param fitness the fitness function
+	 * @param range the chromosome range
+	 * @param generator the random generator
+	 */
 
 	Population(int n, int l, IFitness fitness,int range,Random generator){
 		this.generator = generator;
@@ -42,6 +78,16 @@ public class Population implements Cloneable, Iterable<Individual> {
 	}
 
 	//range == l
+
+	/**
+	 * Generates a population in witch no queens will be in the same column
+	 * @param n the population sie
+	 * @param l the individuals length
+	 * @param fitness the fitness function
+	 * @param range the chromosome range
+	 * @param generator the random generator
+	 * @return a new population
+	 */
 	public static Population differentPopulation(int n, int l, IFitness fitness,int range,Random generator){
 		if(l != range) throw new IllegalArgumentException("The length of the dna and the range of it's chromosomes must match");
 		Population result= new Population();
@@ -61,6 +107,11 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return result;
 	}
 
+	/**
+	 * Shuffles an array
+	 * @param a the array
+	 * @param generator the random generator that will be used
+	 */
 	private static void shuffle(int[] a,Random generator){
 		for(int i = a.length -1 ; i > 0; i--) {
 			int j = generator.nextInt(i + 1);
@@ -68,12 +119,25 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
+	/**
+	 * Exchanges elements in an array
+	 * @param a the array
+	 * @param i an index
+	 * @param j an index
+	 */
 	private static void exchangeOnArray(int[] a, int i, int j)
 	{
 		int t = a[i];
 		a[i] = a[j];
 		a[j] = t;
 	}
+
+	/**
+	 * Tournament Selection without Replacement
+	 * Selects the bests individuals by performing 's' tournaments amongst population.size()/s individuals.
+	 * @param s the number of tournaments
+	 * @return the lists with the best individuals
+	 */
 	public ArrayList<Individual> tournamentSelNoRep(int s){
 		int n = population.size()/s;
 		var winners = new ArrayList<Individual>(size());
@@ -98,7 +162,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return winners;
 	}
 
-
+	/**
+	 * Gets the biggest fitness amongst the population
+	 * @return the biggest fitness
+	 */
 	public double getMax(){
 		double max = -Double.MAX_VALUE;
 		for(var x: population)
@@ -106,6 +173,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return max;
 	}
 
+	/**
+	 * Gets the smallest fitness amongst the population
+	 * @return the smallest fitness
+	 */
 	public double getMin(){
 		double min= Double.MAX_VALUE;
 		for(var x: population)
@@ -113,6 +184,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return min;
 	}
 
+	/**
+	 * Gets the average fitness of the population
+	 * @return the avarage fitness of the population
+	 */
 	public double getAvg(){
 		return total/size();
 	}
@@ -209,6 +284,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return selectedPopulation;
 	}
 
+	/**
+	 * Permutes a list of individuals
+	 * @param a a list of individuals
+	 */
 	private void permutation(ArrayList<Individual> a){
 		int n = a.size()-1;
 		for(int i = 0; i < n;i++) {
@@ -229,18 +308,18 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
-	public ArrayList<Individual> rouletteWheelSelection(int n){
-		var prefixSum = weightedBy();
-		var result = new ArrayList<Individual>(n);
-		for(int i = 0;i<n;i++)
-			result.add(population.get(weightedRandomChoices(prefixSum)));
-		return result;
-	}
+//	public ArrayList<Individual> rouletteWheelSelection(int n){
+//		var prefixSum = weightedBy();
+//		var result = new ArrayList<Individual>(n);
+//		for(int i = 0;i<n;i++)
+//			result.add(population.get(weightedRandomChoices(prefixSum)));
+//		return result;
+//	}
 
-	private int weightedRandomChoices(double[] prefixSum) {
-		var u = generator.nextDouble();
-		return lowerBound(u,prefixSum);
-	}
+//	private int weightedRandomChoices(double[] prefixSum) {
+//		var u = generator.nextDouble();
+//		return lowerBound(u,prefixSum);
+//	}
 
 
 	private double[] weightedBy() {
@@ -293,6 +372,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
+	/**
+	 * Gets the population size
+	 * @return the population size
+	 */
 	public int size(){ return population.size();}
 
 	@Override

@@ -4,10 +4,27 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Individual implements Cloneable{
+	/**
+	 * The fitness function that will calculate the fitness of the individual
+	 */
 	public static IFitness fitnessFunction;
+	/**
+	 * The array representation of the individual
+	 */
 	private int[] representation;
+	/**
+	 * The fitness of the indidual
+	 */
 	private double fitnessValue;
-	public static int range; //the range that a chromosome from the dna can take from [0,range[;
+	/**
+	 * The range that a chromosome from the dna can take from [0,range[
+	 */
+	public static int range;
+
+	/**
+	 * Constructs an individual based in an array representation of an individual.
+	 * @param representation the representation of an individual.
+	 */
 
 	Individual(int[] representation){
 		if(fitnessFunction == null) throw new IllegalStateException("The fitnessFunction must be initialized before hand");
@@ -15,8 +32,19 @@ public class Individual implements Cloneable{
 		fitnessValue = fitnessFunction.getFitness(this);
 	}
 
+	/**
+	 * Get the individual's fitness
+	 * @return the individual's fitness
+	 */
 	public double getFitness() {return fitnessValue;}
-public Individual[] Crossover(Individual partner, Random generator){
+
+	/**
+	 * Performs a crossover of individuals
+	 * @param partner partner for the crossover
+	 * @param generator random generator that will be used to peform the crossover
+	 * @return two new offsprings
+	 */
+	public Individual[] Crossover(Individual partner, Random generator){
 		int l = representation.length;
 		int[] parent1 = representation, parent2 = partner.representation;
 		int c =  generator.nextInt(l); //points were the "dna" is split
@@ -116,6 +144,10 @@ public Individual[] Crossover(Individual partner, Random generator){
 		return Arrays.toString(representation);
 	}
 
+	/**
+	 * Array representation of the individual
+	 * @return the Array representation of the individual
+	 */
 	int[] toArray(){
 		return representation;
 	}
@@ -132,6 +164,11 @@ public Individual[] Crossover(Individual partner, Random generator){
 		}
 	}
 
+	/**
+	 * Performs a mutation by exchanging individuals indexes.
+	 * @param p the mutation chance
+	 * @param generator the random generator that will be used for the mutation
+	 */
 	public void swapMutation(double p,Random generator) {
 		double r = generator.nextDouble();
 		if(r < p/2) {
@@ -146,6 +183,12 @@ public Individual[] Crossover(Individual partner, Random generator){
 		}
 	}
 
+	/**
+	 * Exchange elements in a array
+	 * @param a the array
+	 * @param i an index
+	 * @param j an index
+	 */
 	private static void exchangeOnArray(int[] a, int i, int j)
 	{
 		int t = a[i];

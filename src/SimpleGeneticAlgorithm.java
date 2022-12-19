@@ -3,8 +3,14 @@ import java.util.ArrayList;
 import java.util.*;
 
 public class SimpleGeneticAlgorithm {
+	/**
+	 * The random generator that will be used
+	 */
 	static Random generator;
 
+	/**
+	 * Constructs a SimpleGeneticAlgorithm
+	 */
 	SimpleGeneticAlgorithm() {
 		SimpleGeneticAlgorithm.generator = new Random();
 	}
@@ -49,7 +55,17 @@ public class SimpleGeneticAlgorithm {
 		 return mostFit.toString();
 	}
 
-
+	/**
+	 * Resolves the task with an order based GA
+	 * @param n The population size
+	 * @param l The individual length
+	 * @param range the range of the chromosomes
+	 * @param pCrossover the crossover chance
+	 * @param pMutation the mutation chance
+	 * @param fitness the fitness function
+	 * @param isFit the fitness goal
+	 * @return A string representing the task solution
+	 */
 	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation , IFitness fitness,double isFit){
 		var population = Population.differentPopulation(n,l, fitness,range,generator);
 

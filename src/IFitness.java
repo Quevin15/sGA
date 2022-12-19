@@ -1,4 +1,3 @@
-public interface Fitness {
-	public double getFitness(String s);
-	public boolean isFit(String s);
+public interface IFitness {
+	public double getFitness(Individual x);
 }

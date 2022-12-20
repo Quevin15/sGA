@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+/**
+ * An implementation of the fitness interface for the NQueens problem in which a solution must be found.
+ */
 public class NQueens implements IFitness{
 	/**
 	 * Keeps track of the right-left diagonals being attacked

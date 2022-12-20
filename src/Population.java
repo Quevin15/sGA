@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * The population of individuals.
+ */
 public class Population implements Cloneable, Iterable<Individual> {
 	/**
 	 * The population
@@ -196,94 +199,6 @@ public class Population implements Cloneable, Iterable<Individual> {
 		return total;
 	}
 
-	public Individual binaryTournamentSelection(){
-		int x = (int) Math.round(generator.nextDouble() * (population.size()-1));
-		int y = (int) Math.round(generator.nextDouble() * (population.size()-1));
-		return (population.get(x).getFitness() >= population.get(y).getFitness()) ? population.get(x) : population.get(y);
-	}
-
-	public ArrayList<Individual> elitistSelection(int n){
-		PriorityQueue<Individual> heap = new PriorityQueue<Individual>(n, new Comparator<Individual>() {
-			@Override
-			public int compare(Individual x, Individual y) {
-				if(x.getFitness() > y.getFitness()) return -1;
-				else if(x.getFitness() < y.getFitness()) return 1;
-				return 0;
-			}
-		});
-
-		heap.addAll(population);
-
-		ArrayList<Individual> elitists = new ArrayList<>();
-		for(int i = 0; i < n;i++)
-			elitists.add(heap.poll());
-
-		ArrayList<Individual> result = new ArrayList<>();
-		for(int i = 0; i < size()/n;i++){
-			for(var individual : elitists){
-				result.add(individual.clone());
-			}
-		}
-
-		for(int i =0;i < size()%n;i++){
-			result.add(elitists.get(i).clone());
-		}
-
-		return result;
-	}
-
-
-	public ArrayList<Individual> improvedElitistSelection(int n){
-		PriorityQueue<Individual> heap = new PriorityQueue<Individual>(n, new Comparator<Individual>() {
-			@Override
-			public int compare(Individual x, Individual y) {
-				if(x.getFitness() > y.getFitness()) return -1;
-				else if(x.getFitness() < y.getFitness()) return 1;
-				return 0;
-			}
-		});
-
-		heap.addAll(population);
-
-		ArrayList<Individual> elitists = new ArrayList<>();
-		for(int i = 0; i < n;i++)
-			elitists.add(heap.poll());
-
-		int elitistSample = size()/2;
-		ArrayList<Individual> result = new ArrayList<>();
-		for(int i = 0; i < elitistSample/n;i++){
-			for(var individual : elitists){
-				result.add(individual.clone());
-			}
-		}
-
-		int l = result.size();
-		for(int i= 0; i < size()-l;i++){
-			result.add(population.get(generator.nextInt(size())).clone());
-		}
-
-		return result;
-	}
-
-	public ArrayList<Individual> elitismV3(){
-		int n = size()/20;
-		Individual[] sortedPopulation =  new Individual[size()];
-		for(int i = 0 ; i < size();i++)
-			sortedPopulation[i] = population.get(i);
-
-		Arrays.sort(sortedPopulation, new Comparator<Individual>() {
-			@Override
-			public int compare(Individual individual, Individual t1) {
-				return (int)Math.signum(t1.getFitness() - individual.getFitness());
-			}
-		});
-
-		var selectedPopulation = new ArrayList<Individual>();
-		selectedPopulation.addAll(Arrays.asList(sortedPopulation).subList(0, n));
-
-		return selectedPopulation;
-	}
-
 	/**
 	 * Permutes a list of individuals
 	 * @param a a list of individuals
@@ -298,63 +213,6 @@ public class Population implements Cloneable, Iterable<Individual> {
 		}
 	}
 
-	public void permutation(){
-		int n = population.size()-1;
-		for(int i = 0; i < n;i++) {
-			int r = i + generator.nextInt(n - i);
-			var temp = population.get(r);
-			population.set(r,population.get(i));
-			population.set(i,temp);
-		}
-	}
-
-//	public ArrayList<Individual> rouletteWheelSelection(int n){
-//		var prefixSum = weightedBy();
-//		var result = new ArrayList<Individual>(n);
-//		for(int i = 0;i<n;i++)
-//			result.add(population.get(weightedRandomChoices(prefixSum)));
-//		return result;
-//	}
-
-//	private int weightedRandomChoices(double[] prefixSum) {
-//		var u = generator.nextDouble();
-//		return lowerBound(u,prefixSum);
-//	}
-
-
-	private double[] weightedBy() {
-		int n = size();
-		double[] prefixSum = new double[n];
-		var it = iterator();
-		prefixSum[0] = it.next().getFitness()/total;
-		for(int i = 1; i < n;i++)
-			prefixSum[i] = prefixSum[i-1] + (it.next().getFitness()/total);
-		prefixSum[n-1] = 1;
-
-		return prefixSum;
-	}
-
-	private static int lowerBound(double key,double[] a){
-		int lo = 0; int hi = a.length-1;
-		int mid;
-
-		while(lo < hi){
-			mid = lo + (hi-lo)/2;
-			if(key <= a[mid])
-				hi = mid;
-			else
-				lo = mid+1;
-		}
-
-		if (lo < a.length && a[lo] < key) //a lower bound to the key doesn't exist
-			return -1;
-
-		return lo;
-	}
-
-	public void sort(){
-		population.sort(comparator);
-	}
 
 
 	@Override

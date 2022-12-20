@@ -3,10 +3,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ * An individual of a population
+ */
 public class Individual implements Cloneable{
-	/**
-	 * The fitness function that will calculate the fitness of the individual
-	 */
 	public static IFitness fitnessFunction;
 	/**
 	 * The array representation of the individual
@@ -133,10 +133,17 @@ public class Individual implements Cloneable{
 	}
 
 	public void numberMutation(double p,Random generator) {
-		for(int i = 0; i < representation.length; i++)
-			if(generator.nextDouble() < p)
-				representation[i] = generator.nextInt(range);
-		fitnessValue = fitnessFunction.getFitness(this);
+		double r = generator.nextDouble();
+		if(r < p/2) {
+			representation[generator.nextInt(range)] = generator.nextInt(range);
+			representation[generator.nextInt(range)] = generator.nextInt(range);
+			this.fitnessValue = fitnessFunction.getFitness(this);
+			return;
+		}
+		if(r < p) {
+			representation[generator.nextInt(range)] = generator.nextInt(range);
+			this.fitnessValue = fitnessFunction.getFitness(this);
+		}
 	}
 
 	@Override

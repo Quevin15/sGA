@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 /**
  * An individual of a population
@@ -13,7 +10,7 @@ public class Individual implements Cloneable{
 	 */
 	private int[] representation;
 	/**
-	 * The fitness of the indidual
+	 * The fitness of the individual
 	 */
 	private double fitnessValue;
 	/**
@@ -41,7 +38,7 @@ public class Individual implements Cloneable{
 	/**
 	 * Performs a crossover of individuals
 	 * @param partner partner for the crossover
-	 * @param generator random generator that will be used to peform the crossover
+	 * @param generator random generator that will be used to perform the crossover
 	 * @return two new offsprings
 	 */
 	public Individual[] Crossover(Individual partner, Random generator){
@@ -53,9 +50,7 @@ public class Individual implements Cloneable{
 		for(int i = c; i<c1; i++) set.add(parent1[i]);
 		var children = new Individual[2];
 		int[] aux = new int[l];
-		for(int i = c; i<c1; i++){
-			aux[i] = parent1[i];
-		}
+		if(c1 - c >= 0) System.arraycopy(parent1, c, aux, c, c1 - c);
 		int r = 0;
 		for(int i = 0; i<l; i++){
 			if(set.contains(parent2[i])){
@@ -70,10 +65,9 @@ public class Individual implements Cloneable{
 		for(int i = c; i<c1; i++) set.add(parent2[i]);
 		//stores the children array
 		aux = new int[l];
-		for(int i = c; i<c1; i++){
-			aux[i] = parent2[i];
-		}
-		 r = 0;
+		if(c1 - c >= 0) System.arraycopy(parent2, c, aux, c, c1 - c);
+
+		r = 0;
 		for(int i = 0; i<l; i++){
 			if(set.contains(parent1[i])){
 				continue;
@@ -85,65 +79,55 @@ public class Individual implements Cloneable{
 
 		return children;
 	}
-	
-	public Individual[] onePointCrossover(Individual partner,Random generator){
-		int l = representation.length;
 
-		int[] parent1 = representation, parent2 = partner.representation;
-		int c = 1 +  generator.nextInt(l-2); //points were the "dna" is split
-		var children = new Individual[2];
+	public Individual[] cxCrossover(Individual Partner){
+		int[] parent1 = representation, parent2 = Partner.representation;
+		int[] mapParent2 = new int[representation.length];
+		boolean[] indexesNavigated = new boolean[representation.length];
+		Individual[] children = new Individual[2];
+		var children1 = new int[parent1.length];
+		var children2 = new int[parent1.length];
 
-		//stores the children array
-		int[] childrenArray1 = new int[l];
+		for(int i = 0;i < parent1.length;i++)
+			mapParent2[parent2[i]] = i;
 
-		System.arraycopy(parent1, 0, childrenArray1, 0, c);
-		System.arraycopy(parent2,c,childrenArray1,c,l-c);
-		children[0] = new Individual(childrenArray1);
+		int i = 0;
 
+		var flag = true;
+		while(i < representation.length){
+			if(indexesNavigated[i]){
+				++i;
+				continue;
+			}
 
-		int[] childrenArray2 = new int[l];
-		System.arraycopy(parent1, 0, childrenArray2, 0, c);
-		System.arraycopy(parent2,c,childrenArray2,c,l-c);
-		children[1] = new Individual(childrenArray2);
+			int currentIndex = i;
 
-		return children;
-	}
-
-	public Individual[] uniformCrossover(Individual partner,Random generator) {
-		int l = representation.length;
-		var children = new Individual[2];
-		var child1 = new int[l];
-		var child2 = new int[l];
-		var parent1 = representation;
-		var parent2 = partner.representation;
-
-		for(int i = 0; i < l;i++){
-			if(generator.nextDouble() < 0.5){
-				child1[i] = parent2[i];
-				child2[i] = parent1[i];
+			int[] parentOne;
+			int[] parentTwo;
+			if(flag) {
+				parentOne = parent1;
+				parentTwo = parent2;
 			}
 			else{
-				child1[i] = parent1[i];
-				child2[i] = parent2[i];
+				parentOne = parent2;
+				parentTwo = parent1;
 			}
-		}
-		children[0] = new Individual(child1);
-		children[1] = new Individual(child2);
-		return children;
-	}
 
-	public void numberMutation(double p,Random generator) {
-		double r = generator.nextDouble();
-		if(r < p/2) {
-			representation[generator.nextInt(range)] = generator.nextInt(range);
-			representation[generator.nextInt(range)] = generator.nextInt(range);
-			this.fitnessValue = fitnessFunction.getFitness(this);
-			return;
+			do{
+				int cycleValue = parent1[currentIndex];
+				currentIndex = mapParent2[cycleValue];
+				children1[currentIndex] = parentOne[currentIndex];
+				children2[currentIndex] = parentTwo[currentIndex];
+				indexesNavigated[currentIndex] = true;
+			} while(i != currentIndex);
+
+			flag = !flag;
 		}
-		if(r < p) {
-			representation[generator.nextInt(range)] = generator.nextInt(range);
-			this.fitnessValue = fitnessFunction.getFitness(this);
-		}
+
+		children[0] = new Individual(children1);
+		children[1] = new Individual(children2);
+
+		return children;
 	}
 
 	@Override
@@ -191,7 +175,7 @@ public class Individual implements Cloneable{
 	}
 
 	/**
-	 * Exchange elements in a array
+	 * Exchange elements in an array
 	 * @param a the array
 	 * @param i an index
 	 * @param j an index

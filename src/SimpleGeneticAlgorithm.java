@@ -11,6 +11,7 @@ public class SimpleGeneticAlgorithm {
 	 * The random generator that will be used
 	 */
 	static Random generator;
+	static int k;
 
 	/**
 	 * Constructs a SimpleGeneticAlgorithm
@@ -37,7 +38,6 @@ public class SimpleGeneticAlgorithm {
 	public String orderBasedSwapMutationGA(int n, int l,int range,double pCrossover, double pMutation , IFitness fitness,double isFit){
 		var population = Population.differentPopulation(n,l, fitness,range,generator);
 
-		int k = 0;
 		Individual mostFit;
 		do{
 			var population2 = population.tournamentSelNoRep(n/5);
@@ -61,10 +61,10 @@ public class SimpleGeneticAlgorithm {
 				mostFit = (mostFit.getFitness() < x.getFitness()) ? x : mostFit;
 			}
 
-				 System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
+			//	 System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
 			++k;
 
-		//	System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
+	//		System.out.println(String.format("%d: %.2f %.2f %.2f",k,population.getMax(),population.getAvg(),population.getMin()));
 			population = new Population(population2,fitness,generator);
 		}while(mostFit.getFitness() < isFit);
 		return mostFit.toString();

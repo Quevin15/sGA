@@ -144,8 +144,8 @@ public class Population implements Cloneable, Iterable<Individual> {
 	public ArrayList<Individual> tournamentSelNoRep(int s){
 		int n = population.size()/s;
 		var winners = new ArrayList<Individual>(size());
+		ArrayList<Individual> a = new ArrayList<>(population);
 		for(int k = 0 ; k < s;k++) {
-			ArrayList<Individual> a = new ArrayList<>(population);
 			permutation(a);
 			var it = a.iterator();
 			for(int i = 0; i < n; i++) {
@@ -211,6 +211,10 @@ public class Population implements Cloneable, Iterable<Individual> {
 			a.set(r,a.get(i));
 			a.set(i,temp);
 		}
+	}
+
+	public ArrayList<Individual> toArray(){
+		return population;
 	}
 
 
